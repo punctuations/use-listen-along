@@ -1,5 +1,4 @@
 import { LanyardResponse } from './types';
-import { useEffect } from 'react';
 
 /**
  * use-listen-along
@@ -65,18 +64,14 @@ export function useListenAlong(
     track = r.track;
   };
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      if (!disconnect) {
-        fetch(`https://api.lanyard.rest/v1/users/${snowflake}`)
-          .then((r) => r.json())
-          .then(parseResponse)
-          .then(setResponse);
-      }
-    }, 1000);
-    // clearing interval
-    return () => clearInterval(timer);
-  });
+  setInterval(() => {
+    if (!disconnect) {
+      fetch(`https://api.lanyard.rest/v1/users/${snowflake}`)
+        .then((r) => r.json())
+        .then(parseResponse)
+        .then(setResponse);
+    }
+  }, 1000);
 
   return { connected, error };
 }
