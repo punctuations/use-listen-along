@@ -17,6 +17,7 @@ export function useListenAlong(
   let error: string | null = null;
 
   const parseResponse = (res: LanyardResponse) => {
+    console.log({ status: !res.success, message: res.error.message });
     const error = { status: !res.success, message: res.error.message };
     const np = res.data.listening_to_spotify;
     const track = res.data?.spotify?.track_id;
