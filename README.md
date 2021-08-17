@@ -1,39 +1,41 @@
-# 🌙 wrap-presence
-#### An official wrapper for [presence](https://presence.im).
+# 👥🎵 use-listen along
+#### Typescript React Hook for listening along on spotify.
 
 ### 📦 Installation
 
 ---
 
 via NPM
-> npm i --save wrap-presence
+> npm i --save use-listen-along
 
 via yarn 
-> yarn add wrap-presence
+> yarn add use-listen-along
 
 ### ⌨️ Usage
 
 ----
 
 ```tsx
-import { wrapPresence } from 'wrap-presence';
+import { useListenAlong } from 'use-listen-along';
 
-const Presence = async () => {
-	const req = {
-		platform: 'twitter',
-		type: 'user',
-		params: 'atmattt',
-	};
-	
-	const {data, error, isLoading} =  await wrapPresence(req);
-
-	if (isLoading) {
-		return <p>Loading...</p>
-	} else if (error) {
-		return <p>An error has occured!</p>
+const Spotify = () => {
+  const [connection, setConnection] = React.useState<boolean>(false);
+  
+  // The discord ID of the user you wish to listen-along to.
+  const snowflake = 291050399509774340;
+  // The spotify authorization code.
+  let auth_code: string;
+  
+	function listen(disconnect) {
+	  // Get auth from spotify with scope 'user-modify-playback-state'.
+	  
+	  const {connected, error} = useListenAlong(snowflake, auth_code, disconnect);
+	  setConnection(connected);
 	}
-	
-	return data;
+
+return (
+  <button onClick={() => listen(connection ? true : false)}> {connection ? 'Disconnect' : "Listen Along"} </button>
+)
 }
 ```
 
