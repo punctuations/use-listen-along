@@ -33,7 +33,7 @@ export function useListenAlong(
     np: boolean;
     track: string;
   }) => {
-    if (r.error.status) throw r.error.message;
+    if (r.error.status) throw new Error(r.error.message);
 
     if (r.track !== track && r.np && !disconnect) {
       fetch('https://api.spotify.com/v1/me/player/play', {
@@ -57,7 +57,7 @@ export function useListenAlong(
               : null;
         })
         .catch((e) => {
-          if (e.status) throw e;
+          if (e.status) throw new Error(e);
         });
     }
 
