@@ -1,7 +1,6 @@
-node_modules
-desktop.ini
-.DS_Store
-.idea
 .vscode
+.idea
+node_modules
 dist
+*.lock
 *.log

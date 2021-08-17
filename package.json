@@ -1,34 +1,50 @@
 {
-  "name": "ts-npm-template",
+  "name": "use-listen-along",
+  "description": "A react hook to listen alongside others on spotify.",
   "version": "1.0.0",
-  "repository": "https://github.com/alii/ts-npm-template",
-  "author": "Alistair Smith <alistairsmith01@gmail.com>",
   "license": "MIT",
-  "scripts": {
-    "test": "eslint . --fix&&jest",
-    "prepublishOnly": "npm run test&&npm run build",
-    "build": "tsc"
-  },
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.12.0",
-    "@typescript-eslint/parser": "^4.12.0",
-    "eslint": "^7.17.0",
-    "jest": "^26.6.3",
-    "prettier": "^2.2.1",
-    "ts-jest": "^26.4.4",
-    "typescript": "^4.1.3"
-  },
+  "typings": "dist/index.d.ts",
+  "author": "Matt <matt@dont-ping.me>",
+  "module": "dist/wrap-listen-along.esm.js",
+  "repository": "git://github.com/punctuations/use-listen-along.git",
   "files": [
-    "package.json",
-    "readme.md",
-    "dist"
+    "dist",
+    "src"
   ],
-  "prettier": {
-    "printWidth": 120
+  "engines": {
+    "node": ">=10"
   },
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "lint": "tsdx lint src",
+    "prepare": "tsdx build"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "all"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.18",
+    "husky": "^4.3.0",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.0.3",
+    "typescript": "^4.0.3"
+  },
+  "keywords": [
+    "listen-along",
+    "react",
+    "hook"
+  ],
   "dependencies": {
-    "tslib": "^2.1.0"
+    "react": "^17.0.2"
   }
 }
