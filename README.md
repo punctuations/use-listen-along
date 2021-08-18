@@ -26,7 +26,7 @@ const Spotify = () => {
   // The spotify authorization code.
   let auth_code: string;
   
-	function listen(disconnect) {
+	function listen(disconnect: boolean) {
 	  // Get auth from spotify with scope 'user-modify-playback-state'.
 	  
 	  const {connected, error} = useListenAlong(snowflake, auth_code, disconnect);
@@ -34,7 +34,7 @@ const Spotify = () => {
 	}
 
 return (
-  <button onClick={() => listen(connection ? true : false)}> {connection ? 'Disconnect' : "Listen Along"} </button>
+  <button onClick={() => listen(connection)}> {connection ? 'Disconnect' : "Listen Along"} </button>
 )
 }
 ```
