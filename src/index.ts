@@ -44,7 +44,7 @@ export function useListenAlong(
           Accept: 'application/json',
         },
         body: JSON.stringify({
-          uris: [`spotify:track:${track}`],
+          uris: [`spotify:track:${r.track}`],
         }),
       })
         .then((r) => {
