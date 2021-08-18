@@ -35,7 +35,7 @@ export function useListenAlong(
   }) => {
     if (r.error.status) throw new Error(JSON.stringify(r.error));
 
-    if (r.track !== track && r.np && !disconnect) {
+    if (r.track && r.track !== track && r.np && !disconnect) {
       fetch('https://api.spotify.com/v1/me/player/play', {
         method: 'PUT',
         headers: {
