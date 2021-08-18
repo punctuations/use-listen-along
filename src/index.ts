@@ -18,7 +18,7 @@ export function useListenAlong(
 
   const parseResponse = (res: LanyardResponse) => {
     const error = { status: !res.success, message: res?.error?.message };
-    const np = res.data.listening_to_spotify;
+    const np = res.data?.listening_to_spotify;
     const track = res.data?.spotify?.track_id;
 
     return {
@@ -30,8 +30,8 @@ export function useListenAlong(
 
   const setResponse = (r: {
     error: { status: boolean; message: string };
-    np: boolean;
-    track: string;
+    np: boolean | undefined;
+    track: string | undefined;
   }) => {
     if (r.error.status) throw new Error(JSON.stringify(r.error));
 
