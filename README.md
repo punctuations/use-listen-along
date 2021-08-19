@@ -27,7 +27,7 @@ const Spotify = () => {
   let auth_code: string;
   
 	function listen(disconnect: boolean) {
-	  // Get auth from spotify with scope 'user-modify-playback-state'.
+	  // Get auth from spotify with scope 'user-modify-playback-state user-read-currently-playing'.
 	  
 	  const {connected, error} = useListenAlong(snowflake, auth_code, disconnect);
 	  setConnection(connected);
