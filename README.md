@@ -39,3 +39,9 @@ return (
 }
 ```
 
+### Contributors
+
+- [Conrad](https://github.com/cnrad)
+
+- [Cole](https://github.com/monkeygamer11)
+
