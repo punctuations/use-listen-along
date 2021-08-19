@@ -3,7 +3,7 @@ import { LanyardResponse } from './types';
 /**
  * use-listen-along
  * @param snowflake The discord snowflake of the user you wish to listen-along to.
- * @param auth The spotify auth code, required to have 'user-modify-playback-state' as a scope.
+ * @param auth The spotify auth code, required to have 'user-modify-playback-state user-read-currently-playing' as a scope.
  * @param disconnect A boolean value that can be passed into the function to disconnect a user.
  */
 export function useListenAlong(
@@ -12,6 +12,7 @@ export function useListenAlong(
   disconnect?: boolean,
 ) {
   let track: string | undefined;
+  let currently: string | undefined;
 
   let connected: boolean = false;
   let error: string | null = null;
@@ -28,6 +29,22 @@ export function useListenAlong(
     };
   };
 
+  const currentlyPlaying = () => {
+    fetch(
+      'https://api.spotify.com/v1/me/player/currently-playing?market=from_token',
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${auth}`,
+        },
+      },
+    )
+      .then((r) => r.json())
+      .then((r) => {
+        currently = r?.item?.id;
+      });
+  };
+
   const setResponse = (r: {
     error: { status: boolean; message: string };
     np: boolean | undefined;
@@ -35,7 +52,16 @@ export function useListenAlong(
   }) => {
     if (r.error.status) throw new Error(JSON.stringify(r.error));
 
-    if (r.track && r.track !== track && r.np && !disconnect) {
+    currentlyPlaying();
+
+    if (
+      r.track &&
+      currently &&
+      r.track !== currently &&
+      r.track !== track &&
+      r.np &&
+      !disconnect
+    ) {
       fetch('https://api.spotify.com/v1/me/player/play', {
         method: 'PUT',
         headers: {
@@ -59,9 +85,9 @@ export function useListenAlong(
         .catch((e) => {
           if (e.status) throw new Error(e);
         });
-    }
 
-    track = r.track;
+      track = r.track;
+    }
   };
 
   setInterval(() => {
@@ -71,7 +97,7 @@ export function useListenAlong(
         .then(parseResponse)
         .then(setResponse);
     }
-  }, 1000);
+  }, 1500);
 
   return { connected, error };
 }
