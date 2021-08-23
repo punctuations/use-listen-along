@@ -72,12 +72,20 @@ export function useListenAlong(
         r.np &&
         !disconnect) ||
       (r.track &&
+        r.np &&
+        currently &&
+        r.track == currently &&
+        r.track == track &&
         position &&
         !disconnect &&
         (r.end - r.start - dayjs(r.end).diff(dayjs(), 'millisecond')) / 1000 -
           15 >
           position / 1000) ||
       (r.track &&
+        r.np &&
+        currently &&
+        r.track == currently &&
+        r.track == track &&
         position &&
         !disconnect &&
         (r.end - r.start - dayjs(r.end).diff(dayjs(), 'millisecond')) / 1000 +
