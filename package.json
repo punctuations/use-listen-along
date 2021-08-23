@@ -42,5 +42,8 @@
     "listen-along",
     "react",
     "hook"
-  ]
+  ],
+  "dependencies": {
+    "dayjs": "^1.10.6"
+  }
 }

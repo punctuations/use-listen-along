@@ -1,4 +1,5 @@
 import { LanyardResponse } from './types';
+import dayjs from 'dayjs';
 
 /**
  * use-listen-along
@@ -13,6 +14,7 @@ export function useListenAlong(
 ) {
   let track: string | undefined;
   let currently: string | undefined;
+  let position: number | undefined;
 
   let connected: boolean = false;
   let error: string | null = null;
@@ -21,11 +23,15 @@ export function useListenAlong(
     const error = { status: !res.success, message: res?.error?.message };
     const np = res.data?.listening_to_spotify;
     const track = res.data?.spotify?.track_id;
+    const end = res?.data?.spotify?.timestamps?.end;
+    const start = res?.data?.spotify?.timestamps?.start;
 
     return {
       error,
       np,
       track,
+      end,
+      start,
     };
   };
 
@@ -42,6 +48,7 @@ export function useListenAlong(
       .then((r) => r.json())
       .then((r) => {
         currently = r?.item?.id;
+        position = r?.progress_ms;
       });
   };
 
@@ -49,18 +56,33 @@ export function useListenAlong(
     error: { status: boolean; message: string };
     np: boolean | undefined;
     track: string | undefined;
+    end: number;
+    start: number;
   }) => {
     if (r.error.status) throw new Error(JSON.stringify(r.error));
 
     currentlyPlaying();
 
+    // if the track is different OR the song is behind by 15 seconds OR the song is ahead by 15 seconds
     if (
-      r.track &&
-      currently &&
-      r.track !== currently &&
-      r.track !== track &&
-      r.np &&
-      !disconnect
+      (r.track &&
+        currently &&
+        r.track !== currently &&
+        r.track !== track &&
+        r.np &&
+        !disconnect) ||
+      (r.track &&
+        position &&
+        !disconnect &&
+        (r.end - r.start - dayjs(r.end).diff(dayjs(), 'millisecond')) / 1000 -
+          15 >
+          position / 1000) ||
+      (r.track &&
+        position &&
+        !disconnect &&
+        (r.end - r.start - dayjs(r.end).diff(dayjs(), 'millisecond')) / 1000 +
+          15 <
+          position / 1000)
     ) {
       fetch('https://api.spotify.com/v1/me/player/play', {
         method: 'PUT',
@@ -71,6 +93,11 @@ export function useListenAlong(
         },
         body: JSON.stringify({
           uris: [`spotify:track:${r.track}`],
+          position_ms:
+            // total ms
+            r.end -
+            r.start - // time left in the song
+            dayjs(r.end).diff(dayjs(), 'millisecond'),
         }),
       })
         .then((r) => {
